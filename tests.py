@@ -19,10 +19,10 @@ def test_get_ad_increment():
         country_code='001'
     )
 
-    response = client.post("/ads/", json=ad)
+    response = client.post("/GetAd/", json=ad)
     assert response.status_code == 200
-    el = db["stats"].find_one({"name": f"username-{ad['username']}"})
-    response = client.post("/ads/", json=ad)
+    el =  db["stats"].find_one({"name": f"username-{ad['username']}"})
+    response = client.post("/GetAd/", json=ad)
     assert response.status_code == 200
     update_el = db["stats"].find_one({"name": f"username-{ad['username']}"})
     assert el['ad_requests'] + 1 == update_el['ad_requests']
@@ -37,20 +37,20 @@ def test_impressions_increment():
         country_code='001'
     )
 
-    response = client.post("/impressions/", json=ad)
+    response = client.post("/Impression/", json=ad)
     assert response.status_code == 200
     el = db["stats"].find_one({"name": f"username-{ad['username']}"})
-    response = client.post("/impressions/", json=ad)
+    response = client.post("/Impression/", json=ad)
     assert response.status_code == 200
     update_el = db["stats"].find_one({"name": f"username-{ad['username']}"})
     assert el['impressions'] + 1 == update_el['impressions']
 
 
 def test_get_stats():
-    response = client.get("/get_stats/", params={"filter_type": 'test_username'})
+    response = client.get("/GetStats/", params={"filter_type": 'username'})
 
     json_response = response.json()
     assert response.status_code, 200
-    assert json_response['ad_requests']
-    assert json_response['impressions']
-    assert json_response['fill_rate']
+    assert json_response[0]['ad_requests']
+    assert json_response[0]['impressions']
+    assert json_response[0]['fill_rate']

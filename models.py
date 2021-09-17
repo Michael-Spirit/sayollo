@@ -1,5 +1,12 @@
+from enum import Enum
+
 from bson import ObjectId
 from pydantic import BaseModel, Field
+
+
+class FilterType(Enum):
+    username = 'username'
+    sdk_version = 'sdk_version'
 
 
 class PyObjectId(ObjectId):
@@ -19,6 +26,7 @@ class PyObjectId(ObjectId):
 
 
 class StatsModel(BaseModel):
+    name: str = Field(...)
     ad_requests: int = Field(...)
     impressions: int = Field(...)
 
@@ -28,6 +36,7 @@ class StatsModel(BaseModel):
 
     def to_dict(self):
         return {
+            'name': self.name,
             'ad_requests': self.ad_requests,
             'impressions': self.impressions,
             'fill_rate': self.fill_rate
@@ -52,6 +61,6 @@ class ADModel(BaseModel):
                 "session_id": "1",
                 "platform": "Example Platform",
                 "username": "Example Username",
-                "country_code": 101
+                "country_code": "101"
             }
         }
